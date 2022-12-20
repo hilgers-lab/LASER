@@ -7,7 +7,6 @@
 get_junctions_from_short_reads(
   pathSJ.out,
   min.counts,
-  AnnotJunctions,
   refAnnot,
   linksDatabase,
   genesMultipleJunctions

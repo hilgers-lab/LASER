@@ -4,7 +4,7 @@
 \alias{compute_exon_tss_couplings}
 \title{Compute couplings exon junctions and Transcription start sites}
 \usage{
-compute_exon_tss_couplings(junctions, read_ids, pathJunctionRef)
+compute_exon_tss_couplings(junctions, junctionRef)
 }
 \arguments{
 \item{junctions:}{junction data with to junction-reads assignments}

@@ -4,12 +4,7 @@
 \alias{get_junctions_from_annot}
 \title{Annotate junctions}
 \usage{
-get_junctions_from_annot(
-  AnnotJunctions,
-  refAnnot,
-  linksDatabase,
-  genesMultipleJunctions
-)
+get_junctions_from_annot(AnnotJunctions, linksDatabase, genesMultipleJunctions)
 }
 \value{
 

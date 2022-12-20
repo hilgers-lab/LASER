@@ -1,5 +1,5 @@
 ---
-title: "SaiLoR"
+title: "Splicing influence estimation by Long Reads: SaiLoR"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{SaiLoR}
@@ -17,3 +17,49 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(SaiLoR)
 ```
+
+# Running SAILOR 
+
+# Building junction reference. 
+
+SaiLor requires a reference junction set to identify couplings. SaiLor only analyzes junction that happen outside the influence of 5'selection (alternative transcription start sites) or 3' selection ( Alternative polyadenyilation).
+
+
+SaiLor can build the reference using both a reference annotation as well as short read sequence data junctions from STAR. 
+
+```{r}
+# load reference annotation 
+annot_path <- "../data/dm6.annot.gtf.gz"
+ref_annot <- rtracklayer::import.gff(annot_path)
+# load junctions from STAR 
+junction_path <- "../data/short_read_junctions.SJ.out.tab"
+# create txf file of reference junctions 
+referenece_junctions <- create_reference_junctions( junction_path, min.jcounts = 2 , ref_annot, type="short")
+referenece_junctions
+```
+
+# Read to junctions assignments 
+
+## Full-length read filtering. 
+
+SaiLoR calculations are performed using only full-length reads. For this is necessary to assign reads to TSS and TES id's in the reference. Only reads overlapping a TSS and TES are considered. 
+
+```{r}
+bamPath <- "../data/testBam.bam"
+exonlinks.counts<- read_to_junctions(bamPath, referenece_junctions, annot_path)
+```
+
+# Calculate exon-junction couplings to 5'/3'
+
+```{r}
+couplings <- calculate_exon_couplings(exonlinks.counts,  referenece_junctions )
+```
+
+
+
+
+
+
+
+
+

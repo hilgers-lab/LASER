@@ -62,7 +62,7 @@ make_annotation_txf <- function(refAnnot){
 #' @export
 #'
 #' @examples
-get_junctions_from_annot <- function(AnnotJunctions, refAnnot,linksDatabase,genesMultipleJunctions){
+get_junctions_from_annot <- function(AnnotJunctions,linksDatabase,genesMultipleJunctions){
   # overlap junctions to windows to filter
   message("Removing junctions overlapping TSS and 3'end windows")
   junctionsInPromoters <- GenomicRanges::findOverlaps(AnnotJunctions, linksDatabase$promoterDependentWindow)
@@ -75,9 +75,9 @@ get_junctions_from_annot <- function(AnnotJunctions, refAnnot,linksDatabase,gene
   # remove single junction genes
   message("Removing single CDS isoform genes")
   junctionsToWork <- junctionsToWork %>%
-    as.data.frame(.data) %>% tidyr::unnest(.data$geneName) %>%
-    dplyr::filter(.data$geneName %in% genesMultipleJunctions$geneName) %>%
-    GenomicRanges::makeGRangesFromDataFrame(.data, keep.extra.columns = TRUE)
+    as.data.frame(.) %>% tidyr::unnest(., geneName) %>%
+    dplyr::filter(geneName %in% genesMultipleJunctions$geneName) %>%
+    GenomicRanges::makeGRangesFromDataFrame(., keep.extra.columns = TRUE)
   junctionsToWork <- unique(junctionsToWork)
   junctionsToWork$txName <- NULL
   junctionsToWork$juncID <-
@@ -90,6 +90,7 @@ get_junctions_from_annot <- function(AnnotJunctions, refAnnot,linksDatabase,gene
   junctionRef <- junctionsToWork
   junctionRef$gene_id <- junctionRef$geneName
   junctionRef$geneName <- NULL
+  message("Reference junctions ready")
   return(junctionRef)
 }
 
@@ -105,13 +106,13 @@ get_junctions_from_annot <- function(AnnotJunctions, refAnnot,linksDatabase,gene
 #' @export
 #'
 #' @examples
-get_junctions_from_short_reads <- function(pathSJ.out, min.counts,AnnotJunctions,refAnnot,linksDatabase,genesMultipleJunctions){
+get_junctions_from_short_reads <- function(pathSJ.out, min.counts,refAnnot,linksDatabase,genesMultipleJunctions){
   message("Load splice junction files")
   junctionCounts <- read_sjout(pathSJ.out)
   junctionCounts <- junctionCounts %>%
     dplyr::filter(.data$read.count > min.counts) %>%
     dplyr::select(1, 2, 3, 4, 7, 10) %>%
-    GenomicRanges::makeGRangesFromDataFrame(.data, keep.extra.columns = TRUE)
+    GenomicRanges::makeGRangesFromDataFrame(., keep.extra.columns = TRUE)
   # overlap junctions to windows to filter
   junctionsInPromoters <- GenomicRanges::findOverlaps(junctionCounts, linksDatabase$promoterDependentWindow)
   juncNotIn5prime <- junctionCounts[-S4Vectors::queryHits(junctionsInPromoters)]
@@ -142,7 +143,9 @@ get_junctions_from_short_reads <- function(pathSJ.out, min.counts,AnnotJunctions
 #' @export
 #'
 #' @examples
-create_reference_junctions <- function(pathSJ.out, min.jcounts,AnnotJunctions, refAnnot, type){
+create_reference_junctions <- function(pathSJ.out, min.jcounts, refAnnot, type){
+  message("Extracting junctions from annotation")
+  AnnotJunctions <- make_annotation_txf(refAnnot)
   message("Preparing Annotation of 5'and 3' ends")
   linksDatabase <- prepareLinksDatabase(refAnnot,
                                               tss.window = 50,
@@ -166,20 +169,23 @@ create_reference_junctions <- function(pathSJ.out, min.jcounts,AnnotJunctions, r
     ))
 
   # get genes with more 1 different junction
-  genesMultipleJunctions <- AnnotJunctions %>% as.data.frame(.data) %>%
-    tidyr::unnest(.data, .data$txName) %>% tidyr::unnest(.data, .data$geneName) %>%
-    mutate(JunID = paste0(.data$seqnames, .data$start, .data$end)) %>%
-    dplyr::group_by(.data$txName) %>%
-    dplyr::mutate(junName = paste0(.data$JunID, collapse = "|")) %>%
-    dplyr::distinct(.data$junName, .keep_all = TRUE) %>%
-    dplyr::group_by(.data$geneName) %>% dplyr::tally() %>% dplyr::filter(.data$n>1)
+  genesMultipleJunctions <- AnnotJunctions %>% as.data.frame(.) %>%
+    tidyr::unnest(., txName) %>% tidyr::unnest(., geneName) %>%
+    mutate(JunID = paste0(seqnames, start, end)) %>%
+    dplyr::group_by(txName) %>%
+    dplyr::mutate(junName = paste0(JunID, collapse = "|")) %>%
+    dplyr::distinct(junName, .keep_all = TRUE) %>%
+    dplyr::group_by(geneName) %>% dplyr::tally() %>% dplyr::filter(n>1)
 
   if(type=="short"){
+    message("Extracting junctions from short reads")
     shortReadJunctions <- get_junctions_from_short_reads(pathSJ.out,
                                                          min.counts=min.jcounts,
-                                                         AnnotJunctions,
-                                                         refAnnot )
-    annotationJunctions <- get_junctions_from_annot(AnnotJunctions, refAnnot)
+                                                         refAnnot,
+                                                         linksDatabase,
+                                                         genesMultipleJunctions)
+    message("Extracting junctions from reference annotation")
+    annotationJunctions <- get_junctions_from_annot(AnnotJunctions, linksDatabase,genesMultipleJunctions)
     reference_junctions <- c(shortReadJunctions, annotationJunctions)
     return(reference_junctions)
   }else{

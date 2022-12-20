@@ -4,7 +4,7 @@
 \alias{compute_exon_3end_couplings}
 \title{Compute couplings exon junctions and 3'ends}
 \usage{
-compute_exon_3end_couplings(junctions, read_ids, pathJunctionRef)
+compute_exon_3end_couplings(junctions, junctionRef)
 }
 \arguments{
 \item{junctions:}{junction data with to junction-reads assignments}

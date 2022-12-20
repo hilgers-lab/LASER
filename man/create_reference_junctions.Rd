@@ -4,13 +4,7 @@
 \alias{create_reference_junctions}
 \title{Title}
 \usage{
-create_reference_junctions(
-  pathSJ.out,
-  min.jcounts,
-  AnnotJunctions,
-  refAnnot,
-  type
-)
+create_reference_junctions(pathSJ.out, min.jcounts, refAnnot, type)
 }
 \value{
 

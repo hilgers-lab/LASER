@@ -8,6 +8,7 @@
 #'
 #' @examples
 countLinks <- function(alignments, linksDatabase) {
+
   # make single nt starts
   startsAlignemnts <-  prepareForCountStarts(alignments, 1)
   startAlignments <-
@@ -47,7 +48,7 @@ countLinks <- function(alignments, linksDatabase) {
   # normalize expression in CPMs
   dd <- edgeR::DGEList(counts = countedPairsFinal$n)
   dge <- edgeR::calcNormFactors(dd)
-  countedPairsFinal$pairs_cpm <- as.numeric (cpm(dge))
+  countedPairsFinal$pairs_cpm <- as.numeric (edgeR::cpm(dge))
   res <- list()
   res$countedPairsFinal <- countedPairsFinal
   res$pairsTested <- pairsTested
@@ -66,8 +67,8 @@ prepareForCountStarts <- function(x, window) {
   alignments <- x
   pos <- alignments[alignments@strand == "+",]
   neg <- alignments[alignments@strand == "-",]
-  end(pos) <- start(pos) + window
-  start(neg) <- end(neg) - window
+  GenomicRanges::end(pos) <- GenomicRanges::start(pos) + window
+  GenomicRanges::start(neg) <- GenomicRanges::end(neg) - window
   shortstarts <- c(pos, neg)
   return(shortstarts)
 }
@@ -84,8 +85,8 @@ prepareForCountEnds <- function(x, window) {
   alignments <- x
   pos <- alignments[alignments@strand == "+",]
   neg <- alignments[alignments@strand == "-",]
-  start(pos) <- end(pos) - window
-  end(neg) <- start(neg) + window
+  GenomicRanges::start(pos) <- GenomicRanges::end(pos) - window
+  GenomicRanges::end(neg) <- GenomicRanges::start(neg) + window
   shortstarts <- c(pos, neg)
   return(shortstarts)
 }
@@ -100,14 +101,14 @@ prepareForCountEnds <- function(x, window) {
 #' @examples
 readTSSassignment <- function(startsAlignemnts, TSSCoordinate.base) {
   tssDb <- TSSCoordinate.base
-  ovlps <- findOverlaps(startsAlignemnts , tssDb , maxgap = 50)
+  ovlps <- GenomicRanges::findOverlaps(startsAlignemnts , tssDb , maxgap = 50)
   promoterIds <- tssDb[subjectHits(ovlps),]$count
-  promoterStarts <- start(tssDb[subjectHits(ovlps),])
+  promoterStarts <- GenomicRanges::start(tssDb[subjectHits(ovlps),])
   startsAlignemnts2 <- startsAlignemnts[queryHits(ovlps),]
   startsAlignemnts2$promoter_id <- promoterIds
   startsAlignemnts2$promoterStarts <- promoterStarts
   startsAlignemnts2$dist2Assignment <-
-    abs(start(startsAlignemnts2) - startsAlignemnts2$promoterStarts)
+    abs(GenomicRanges::start(startsAlignemnts2) - startsAlignemnts2$promoterStarts)
   startsAlignemnts2 <-
     startsAlignemnts2[order(startsAlignemnts2$dist2Assignment, decreasing = FALSE),]
   startsAlignemnts2 <-
@@ -127,12 +128,12 @@ readTESassignment <- function(endsAlignements, TESCoordinate.base) {
   tesDb <- TESCoordinate.base
   ovlps <- findOverlaps(endsAlignements , tesDb , maxgap = 150)
   tesIds <- tesDb[subjectHits(ovlps),]$count
-  endStarts <- start(tesDb[subjectHits(ovlps),])
+  endStarts <- GenomicRanges::start(tesDb[subjectHits(ovlps),])
   endsAlignemnts2 <- endsAlignements[queryHits(ovlps),]
   endsAlignemnts2$tes_id <- tesIds
   endsAlignemnts2$endStarts <- endStarts
   endsAlignemnts2$dist2Assignment <-
-    abs(start(endsAlignemnts2) - endsAlignemnts2$endStarts)
+    abs(GenomicRanges::start(endsAlignemnts2) - endsAlignemnts2$endStarts)
   endsAlignemnts2 <-
     endsAlignemnts2[order(endsAlignemnts2$dist2Assignment, decreasing = FALSE),]
   endsAlignemnts2 <-
@@ -151,10 +152,12 @@ readTESassignment <- function(endsAlignements, TESCoordinate.base) {
 #' @export
 #'
 #' @examples
-get_sailor_full_lengths <- function(annotPath, bedFilePath, tss.ntwindow, tes.ntwindow) {
-  annot <- import.gff(annotPath)
-  linksDatabase <- prepareLinksDatabase(annot, tss.window=tss.ntwindow, tes.ntwindow=tes.ntwindow)
-  alignmentsFile <- rtracklayer::import.bed(bedFilePath)
+get_sailor_full_lengths <- function(annotPath, alignmentsFile, tss.ntwindow, tes.ntwindow) {
+  annot <- rtracklayer::import.gff(annotPath)
+  linksDatabase <- prepareLinksDatabase(annot, tss.window=tss.ntwindow, tes.window=tes.ntwindow)
+  alignmentsFile <- GenomicRanges::GRanges(alignmentsFile)
+  alignmentsFile$name <- names(alignmentsFile)
+  names(alignmentsFile) <- NULL
   countsLinks <- countLinks(alignmentsFile, linksDatabase)
   return(countsLinks)
   }

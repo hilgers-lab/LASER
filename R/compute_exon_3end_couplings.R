@@ -8,15 +8,11 @@
 #' @export
 #'
 #' @examples
-compute_exon_3end_couplings <- function(junctions,read_ids,pathJunctionRef){
-  juncSums <- readr::read_tsv(junctions) %>% dplyr::select(new_junID, read_id)
-  fullLengths <- readr::read_tsv(read_ids)
-  junctionRef<- rtracklayer::import.gff(pathJunctionRef)
+compute_exon_3end_couplings <- function(junctions,junctionRef){
+  #juncSums <- readr::read_tsv(junctions) %>% dplyr::select(new_junID, read_id)
+  #fullLengths <- readr::read_tsv(read_ids)
   # keep only junctions in database
-  juncSums <- juncSums %>% filter(new_junID %in% junctionRef$juncID)
-  readsToJunctions <- left_join(fullLengths,
-                     juncSums %>% dplyr::rename(name = read_id),
-                     by = "name")
+  readsToJunctions <- junctions %>% filter(new_junID %in% junctionRef$juncID)
   # summary junction combinations found.add less memory consuming id
   tmpRefjun <- readsToJunctions %>%
     distinct(new_junID, .keep_all = TRUE) %>%
@@ -30,10 +26,10 @@ compute_exon_3end_couplings <- function(junctions,read_ids,pathJunctionRef){
     by =  "new_junID"
   )
   readsToJunctionsCollapse <- readsToJunctions %>%
-    group_by(name) %>%
+    group_by(read_id) %>%
     mutate(juncComb = paste0(jun_id, collapse = ",")) %>% mutate(juncComb=paste0(gene_id, ":", juncComb))
   junCombCounts <- readsToJunctionsCollapse %>%
-    distinct(name , .keep_all = TRUE) %>%
+    distinct(read_id , .keep_all = TRUE) %>%
     group_by(juncComb) %>%
     tally()
   # keep only genes with more than 2 junction combinations with at least 2 reads each
@@ -161,7 +157,7 @@ compute_exon_3end_couplings <- function(junctions,read_ids,pathJunctionRef){
   x2 <-  lapply( couplingsmatrix, makeDFPerGene)
   x3 <- do.call(rbind,x2)
   longTable <- x3
-  tt2 <- test2 %>%
+  tt2 <- readsToJunctions %>%
     dplyr::select(new_junID,jun_id) %>%
     distinct(new_junID, .keep_all = TRUE) %>%
     dplyr::rename(gene_id=new_junID)

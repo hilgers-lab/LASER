@@ -38,7 +38,6 @@ prepareLinksDatabase <- function(annotation, tss.window, tes.window) {
     strandSort(plyranges::mutate(plyranges::anchor_5p(dplyr::filter(e2, exon_rank ==
                                                                       1)), width = 1))
   # make unique TSS starts merging in a 50nt window.
-  cat("Preparing TSSBase\n")
   tss.base <-
     strandSort(
       GenomicRanges::makeGRangesFromDataFrame(
@@ -74,7 +73,6 @@ prepareLinksDatabase <- function(annotation, tss.window, tes.window) {
   tes.bins  <-
     strandSort(plyranges::mutate(plyranges::anchor_3p(le), width = 1))
   # make unique TSS starts merging in a 50nt window.
-  cat("PrepEndBase")
   tes.base <-
     strandSort (
       GenomicRanges::makeGRangesFromDataFrame(
@@ -87,7 +85,7 @@ prepareLinksDatabase <- function(annotation, tss.window, tes.window) {
       )
     )
   tes.base <-
-    tibble::as.tibble(tes.base)  %>%  dplyr::group_by(value.group_name) %>%
+    tibble::as_tibble(tes.base)  %>%  dplyr::group_by(value.group_name) %>%
     dplyr::mutate(count =  paste0(value.group_name, ":TE", sprintf("%02d", sequence(dplyr::n(
     ))))) %>%
     GenomicRanges::makeGRangesFromDataFrame(., keep.extra.columns = TRUE)

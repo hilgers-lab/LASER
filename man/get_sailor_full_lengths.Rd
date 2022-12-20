@@ -4,7 +4,7 @@
 \alias{get_sailor_full_lengths}
 \title{Get sailor full lengths}
 \usage{
-get_sailor_full_lengths(annotPath, bedFilePath, tss.ntwindow, tes.ntwindow)
+get_sailor_full_lengths(annotPath, alignmentsFile, tss.ntwindow, tes.ntwindow)
 }
 \arguments{
 \item{tes.ntwindow}{}
