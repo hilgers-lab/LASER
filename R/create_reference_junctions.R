@@ -36,8 +36,8 @@ read_sjout <- function(sjbPath) {
   return(junctionFile)
 }
 #' Extract junctions from annotation
-#'
-#' @param refAnnot
+#' Create junctions from annotation
+#' @param refAnnot: path to refrence annotation
 #' @importFrom rlang .data
 #' @return
 #' @export
@@ -54,9 +54,9 @@ make_annotation_txf <- function(refAnnot){
 
 #' Annotate junctions
 #'
-#' @param AnnotJunctions
-#' @param refAnnot
-#' @param linksDatabase
+#' @param AnnotJunctionsL: junction object from make_annotation_txf
+#' @param linksDatabase: database to identify TSS and TES to filter exons
+#' @param genesMultipleJunctions: object of genes with multiple isoforms
 #' @importFrom rlang .data
 #' @return
 #' @export
@@ -94,14 +94,15 @@ get_junctions_from_annot <- function(AnnotJunctions,linksDatabase,genesMultipleJ
   return(junctionRef)
 }
 
-#' Get junctions from short read sequencing data
+
+#' Retreive junctions from short read sequencing
 #'
-#' @param pathSJ.out
-#' @param min.counts
-#' @param AnnotJunctions
-#' @param refAnnot
-#' @param linksDatabase
-#' @importFrom rlang .data
+#' @param pathSJ.out : path to STAR short read junctions file
+#' @param min.counts: minimal counts to filter junctions
+#' @param refAnnot: reference annotation in genomicRanges format
+#' @param linksDatabase: 5'/3' reference annotation
+#' @param genesMultipleJunctions: object with genes identified with their junctions
+#'
 #' @return
 #' @export
 #'
@@ -131,14 +132,14 @@ get_junctions_from_short_reads <- function(pathSJ.out, min.counts,refAnnot,links
   shortReadJunctions <- shortReadJunctions[shortReadJunctions$gene_id %in% genesMultipleJunctions$geneName,]
   return(shortReadJunctions)
 }
+
 #' Title
 #'
-#' @param pathSJ.out
-#' @param min.jcounts
-#' @param AnnotJunctions
-#' @param refAnnot
-#' @param type
-#' @importFrom rlang .data
+#' @param pathSJ.out: object of junctions from STAR
+#' @param min.jcounts : minimal counts for junction filtering
+#' @param refAnnot : reference annotation genomic ranges object
+#' @param type: specicify type if want to use short read correction.
+#'
 #' @return
 #' @export
 #'

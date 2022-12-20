@@ -7,9 +7,9 @@
 prepareForCountEnds(x, window)
 }
 \arguments{
-\item{x}{alignments}
+\item{x}{alignments: alignments file from minimap2}
 
-\item{window}{window for trimming}
+\item{window}{window for trimming the reads to their most 5'/3'}
 }
 \value{
 

@@ -1,8 +1,7 @@
-#' Compute couplings exon junctions and Transcription start sites
+#' Calculate couplings between exon and TSSs
 #'
-#' @param junctions: junction data with to junction-reads assignments
-#' @param read_ids: read_ids for full length reads
-#' @param pathJunctionRef: reference database used.
+#' @param junctions: junctions obtained from Long read data assigned to read_ids
+#' @param junctionRef: set of junctions of interest classified using SaiLoR
 #'
 #' @return
 #' @export

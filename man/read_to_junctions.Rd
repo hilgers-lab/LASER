@@ -7,9 +7,11 @@
 read_to_junctions(bamPath, refJunAnnot, pathAnnot)
 }
 \arguments{
-\item{bamPath:}{path to bed file}
+\item{bamPath:}{path to minimap2 bam file}
 
-\item{refJunAnnot:}{path to reference junctions in genomic ranges format}
+\item{refJunAnnot:}{reference_junctions: set of junctions of interest classified using SaiLoR}
+
+\item{pathAnnot:}{path to reference annotation}
 }
 \value{
 

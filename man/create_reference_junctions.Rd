@@ -6,6 +6,15 @@
 \usage{
 create_reference_junctions(pathSJ.out, min.jcounts, refAnnot, type)
 }
+\arguments{
+\item{min.jcounts}{: minimal counts for junction filtering}
+
+\item{refAnnot}{: reference annotation genomic ranges object}
+
+\item{pathSJ.out:}{object of junctions from STAR}
+
+\item{type:}{specicify type if want to use short read correction.}
+}
 \value{
 
 }

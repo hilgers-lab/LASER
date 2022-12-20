@@ -1,8 +1,8 @@
 #' junctions to reads assignments
 #'
-#' @param bamPath: path to bed file
-#' @param refJunAnnot: path to reference junctions in genomic ranges format
-#'
+#' @param bamPath: path to minimap2 bam file
+#' @param refJunAnnot: reference_junctions: set of junctions of interest classified using SaiLoR
+#' @param pathAnnot: path to reference annotation
 #'
 #' @return
 #' @export
@@ -23,10 +23,10 @@ read_to_junctions <- function(bamPath,refJunAnnot, pathAnnot){
 }
 #' Title
 #'
-#' @param bamJunctions
-#' @param shortReadJunctions
-#' @param dist.5ss
-#' @param dist.3ss
+#' @param bamJunctions: bam junctions obtained from read_to_junctions functions
+#' @param shortReadJunctions: read junctions from STAR
+#' @param dist.5ss : distance to 5ss splice site to compare to reference to be corrected in the long reads
+#' @param dist.3ss : distance to 3ss splice site to compare to reference to be corrected in the long reads
 #' @importFrom rlang .data
 #' @importFrom GenomicRanges seqnames
 #' @importFrom GenomicRanges start

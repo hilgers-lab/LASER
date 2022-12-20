@@ -2,16 +2,22 @@
 % Please edit documentation in R/get_sailor_full_lengths.R
 \name{get_sailor_full_lengths}
 \alias{get_sailor_full_lengths}
-\title{Get sailor full lengths}
+\title{Identify full length reads for downstream analysis}
 \usage{
 get_sailor_full_lengths(annotPath, alignmentsFile, tss.ntwindow, tes.ntwindow)
 }
 \arguments{
-\item{tes.ntwindow}{}
+\item{annotPath}{: reference annotaiton path}
+
+\item{alignmentsFile}{: bam file alignments object}
+
+\item{tss.ntwindow}{: window for the database assignment for full length at thes TSS}
+
+\item{tes.ntwindow}{: window for the database assignment for full length at thes TES}
 }
 \value{
 
 }
 \description{
-Get sailor full lengths
+Identify full length reads for downstream analysis
 }

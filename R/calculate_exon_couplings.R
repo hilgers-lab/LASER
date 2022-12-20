@@ -1,10 +1,9 @@
-#' Title
+#' Calculate exon couplings
 #'
-#' @param junctions
-#' @param read_ids
-#' @param pathJunctionRef
+#' @param junctions: junctions obtained from Long read data assigned to read_ids
+#' @param reference_junctions: set of junctions of interest classified using SaiLoR
 #'
-#' @return
+#' @return couplings result list file with couplings for TSS and TES
 #' @export
 #'
 #' @examples

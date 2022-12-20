@@ -1,7 +1,7 @@
 #' Count full length reads
 #'
-#' @param alignments
-#' @param linksDatabase
+#' @param alignments: alignments file from minimap2
+#' @param linksDatabase: created with prepare_links_database
 #'
 #' @return
 #' @export
@@ -56,8 +56,8 @@ countLinks <- function(alignments, linksDatabase) {
 }
 #' prepare counts trimming the reads to their most 5' into a 1 nt window for counting
 #'
-#' @param x alignments
-#' @param window window for trimming
+#' @param x alignments: alignments file from minimap2
+#' @param window window for trimming the reads to their most 5'/3'
 #'
 #' @return
 #' @export
@@ -74,9 +74,8 @@ prepareForCountStarts <- function(x, window) {
 }
 #' prepare counts trimming the reads to their most 3' into a 1 nt window for counting
 #'
-#' @param x alignments
-#' @param window window for trimming
-#'
+#' @param x  alignments: alignments file from minimap2
+#' @param window window for trimming the reads to their most 5'/3'
 #' @return
 #' @export
 #'
@@ -141,12 +140,12 @@ readTESassignment <- function(endsAlignements, TESCoordinate.base) {
   return(endsAlignemnts2)
 }
 
-#' Get sailor full lengths
+#' Identify full length reads for downstream analysis
 #'
-#' @param annotPath
-#' @param bedFilePath
-#' @param tss.ntwindow
-#' @param tes.ntwindow
+#' @param annotPath : reference annotaiton path
+#' @param alignmentsFile : bam file alignments object
+#' @param tss.ntwindow : window for the database assignment for full length at thes TSS
+#' @param tes.ntwindow : window for the database assignment for full length at thes TES
 #'
 #' @return
 #' @export

@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_reference_junctions.R
 \name{get_junctions_from_short_reads}
 \alias{get_junctions_from_short_reads}
-\title{Get junctions from short read sequencing data}
+\title{Retreive junctions from short read sequencing}
 \usage{
 get_junctions_from_short_reads(
   pathSJ.out,
@@ -12,9 +12,20 @@ get_junctions_from_short_reads(
   genesMultipleJunctions
 )
 }
+\arguments{
+\item{pathSJ.out}{: path to STAR short read junctions file}
+
+\item{min.counts:}{minimal counts to filter junctions}
+
+\item{refAnnot:}{reference annotation in genomicRanges format}
+
+\item{linksDatabase:}{5'/3' reference annotation}
+
+\item{genesMultipleJunctions:}{object with genes identified with their junctions}
+}
 \value{
 
 }
 \description{
-Get junctions from short read sequencing data
+Retreive junctions from short read sequencing
 }

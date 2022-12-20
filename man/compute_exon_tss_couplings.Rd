@@ -2,20 +2,18 @@
 % Please edit documentation in R/compute_exon_tss_couplings.R
 \name{compute_exon_tss_couplings}
 \alias{compute_exon_tss_couplings}
-\title{Compute couplings exon junctions and Transcription start sites}
+\title{Calculate couplings between exon and TSSs}
 \usage{
 compute_exon_tss_couplings(junctions, junctionRef)
 }
 \arguments{
-\item{junctions:}{junction data with to junction-reads assignments}
+\item{junctions:}{junctions obtained from Long read data assigned to read_ids}
 
-\item{read_ids:}{read_ids for full length reads}
-
-\item{pathJunctionRef:}{reference database used.}
+\item{junctionRef:}{set of junctions of interest classified using SaiLoR}
 }
 \value{
 
 }
 \description{
-Compute couplings exon junctions and Transcription start sites
+Calculate couplings between exon and TSSs
 }

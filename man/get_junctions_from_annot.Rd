@@ -6,6 +6,13 @@
 \usage{
 get_junctions_from_annot(AnnotJunctions, linksDatabase, genesMultipleJunctions)
 }
+\arguments{
+\item{AnnotJunctionsL:}{junction object from make_annotation_txf}
+
+\item{linksDatabase:}{database to identify TSS and TES to filter exons}
+
+\item{genesMultipleJunctions:}{object of genes with multiple isoforms}
+}
 \value{
 
 }

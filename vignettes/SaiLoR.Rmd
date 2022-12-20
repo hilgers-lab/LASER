@@ -22,12 +22,9 @@ library(SaiLoR)
 
 # Building junction reference. 
 
-SaiLor requires a reference junction set to identify couplings. SaiLor only analyzes junction that happen outside the influence of 5'selection (alternative transcription start sites) or 3' selection ( Alternative polyadenyilation).
+SaiLoR requires a reference junction set to identify couplings. It only analyzes junctions that occur outside the influence of 5' selection (alternative transcription start sites) or 3' selection (alternative polyadenylation). Sailor can build the reference using both a reference annotation and short read sequence data junctions from STAR.
 
-
-SaiLor can build the reference using both a reference annotation as well as short read sequence data junctions from STAR. 
-
-```{r}
+```{r, warning=FALSE, message=FALSE}
 # load reference annotation 
 annot_path <- "../data/dm6.annot.gtf.gz"
 ref_annot <- rtracklayer::import.gff(annot_path)
@@ -42,7 +39,7 @@ referenece_junctions
 
 ## Full-length read filtering. 
 
-SaiLoR calculations are performed using only full-length reads. For this is necessary to assign reads to TSS and TES id's in the reference. Only reads overlapping a TSS and TES are considered. 
+SaiLoR generates a database with read-to-feature assignments. This process involves three steps occurring within `read_to_junctions()`. The steps include: 1) Identifying only 5'-3' full length read isoforms. This filtering is done with `get_sailor_full_lengths()`, considering only reads spanning an annotated TSS and 3' end. 2) Correcting the junctions found in long reads using reference annotation and short read data in `read_refjunction_correction()`. 3) Last, `make_junction_database()` takes each read and assigns the features it contains: TSS, TES, and the junctions it contains.  
 
 ```{r}
 bamPath <- "../data/testBam.bam"
@@ -50,6 +47,8 @@ exonlinks.counts<- read_to_junctions(bamPath, referenece_junctions, annot_path)
 ```
 
 # Calculate exon-junction couplings to 5'/3'
+
+SaiLoR calculates exon couplings by generating contingency matrices from exon junctions to promoters with `compute_exon_tss_couplings()` and exon junctions to 3' ends with `compute_exon_3end_couplings()`. It uses multinomial testing with the chi-squared statistic to test the significance of the couplings. To account for possible biases due to low counts, the p-value is simulated using Monte Carlo methods.
 
 ```{r}
 couplings <- calculate_exon_couplings(exonlinks.counts,  referenece_junctions )

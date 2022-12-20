@@ -1,10 +1,9 @@
-#' Compute couplings exon junctions and 3'ends
+#' Compute couplings between 3'ends and exons
 #'
-#' @param junctions: junction data with to junction-reads assignments
-#' @param read_ids: read_ids for full length reads
-#' @param pathJunctionRef: reference database used.
+#' @param junctions: junctions obtained from Long read data assigned to read_ids
+#' @param junctionRef: set of junctions of interest classified using SaiLoR
 #'
-#' @return
+#' @return couplings of 3'ends to exons
 #' @export
 #'
 #' @examples

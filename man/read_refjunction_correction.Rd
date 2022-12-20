@@ -11,6 +11,15 @@ read_refjunction_correction(
   dist.3ss
 )
 }
+\arguments{
+\item{dist.5ss}{: distance to 5ss splice site to compare to reference to be corrected in the long reads}
+
+\item{dist.3ss}{: distance to 3ss splice site to compare to reference to be corrected in the long reads}
+
+\item{bamJunctions:}{bam junctions obtained from read_to_junctions functions}
+
+\item{shortReadJunctions:}{read junctions from STAR}
+}
 \value{
 
 }

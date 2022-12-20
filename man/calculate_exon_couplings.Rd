@@ -2,16 +2,18 @@
 % Please edit documentation in R/calculate_exon_couplings.R
 \name{calculate_exon_couplings}
 \alias{calculate_exon_couplings}
-\title{Title}
+\title{Calculate exon couplings}
 \usage{
 calculate_exon_couplings(junctions, reference_junctions)
 }
 \arguments{
-\item{pathJunctionRef}{}
+\item{junctions:}{junctions obtained from Long read data assigned to read_ids}
+
+\item{reference_junctions:}{set of junctions of interest classified using SaiLoR}
 }
 \value{
-
+couplings result list file with couplings for TSS and TES
 }
 \description{
-Title
+Calculate exon couplings
 }

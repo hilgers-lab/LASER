@@ -7,7 +7,9 @@
 countLinks(alignments, linksDatabase)
 }
 \arguments{
-\item{linksDatabase}{}
+\item{alignments:}{alignments file from minimap2}
+
+\item{linksDatabase:}{created with prepare_links_database}
 }
 \value{
 

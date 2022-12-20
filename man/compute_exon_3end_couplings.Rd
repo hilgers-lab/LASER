@@ -2,20 +2,18 @@
 % Please edit documentation in R/compute_exon_3end_couplings.R
 \name{compute_exon_3end_couplings}
 \alias{compute_exon_3end_couplings}
-\title{Compute couplings exon junctions and 3'ends}
+\title{Compute couplings between 3'ends and exons}
 \usage{
 compute_exon_3end_couplings(junctions, junctionRef)
 }
 \arguments{
-\item{junctions:}{junction data with to junction-reads assignments}
+\item{junctions:}{junctions obtained from Long read data assigned to read_ids}
 
-\item{read_ids:}{read_ids for full length reads}
-
-\item{pathJunctionRef:}{reference database used.}
+\item{junctionRef:}{set of junctions of interest classified using SaiLoR}
 }
 \value{
-
+couplings of 3'ends to exons
 }
 \description{
-Compute couplings exon junctions and 3'ends
+Compute couplings between 3'ends and exons
 }

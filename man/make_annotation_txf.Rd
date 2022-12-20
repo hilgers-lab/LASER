@@ -2,13 +2,18 @@
 % Please edit documentation in R/create_reference_junctions.R
 \name{make_annotation_txf}
 \alias{make_annotation_txf}
-\title{Extract junctions from annotation}
+\title{Extract junctions from annotation
+Create junctions from annotation}
 \usage{
 make_annotation_txf(refAnnot)
+}
+\arguments{
+\item{refAnnot:}{path to refrence annotation}
 }
 \value{
 
 }
 \description{
 Extract junctions from annotation
+Create junctions from annotation
 }
