@@ -2,7 +2,7 @@
 ## Splicing influence estimation by Long Reads
 <!-- badges: start -->
 
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/hilgers-lab/SaiLoR)(https://github.com/hilgers-lab/SaiLoR/releases/)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/hilgers-lab/SaiLoR)
 [![Maintained?](https://img.shields.io/badge/Maintained%3F-Yes-brightgreen)](https://github.com/hilgers-lab/SaiLoR/graphs/contributors)
 [![Install](https://img.shields.io/badge/Install-Github-brightgreen)](#installation)
 [![Downloads](https://img.shields.io/github/downloads/hilgers-lab/SaiLoR/total)]()
