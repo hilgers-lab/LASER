@@ -6,19 +6,19 @@
 [![Maintained?](https://img.shields.io/badge/Maintained%3F-Yes-brightgreen)](https://github.com/hilgers-lab/SaiLoR/graphs/contributors)
 [![Install](https://img.shields.io/badge/Install-Github-brightgreen)](#installation)
 [![Downloads](https://img.shields.io/github/downloads/hilgers-lab/SaiLoR/total)]()
-![GitHub](https://img.shields.io/github/license/hilgers-lab/SaiLoR) 
+![GitHub](https://img.shields.io/github/license/hilgers-lab/SaiLoR)
 <!-- badges: end -->
 
-SaiLoR determines the regulatory connections between exons, 5' ends, and 3' ends by analyzing every read as a complete transcript and using multinomial testing to evaluate the frequency of co-occurrence among these features. 
+SaiLoR determines the regulatory connections between exons, 5' ends, and 3' ends by analyzing every read as a complete transcript and using multinomial testing to evaluate the frequency of co-occurrence among these features.
 
 
-### Installation 
+### Installation
 
 ```
 install.packages("devtools")
 devtools::install_github("hilgers-lab/SaiLoR", build = TRUE, build_vignettes = TRUE)
 ```
-### Usage 
+### Usage
 The vignette contains a step by step guide for data processing and identification of exon-couplings.
 
 ```
@@ -31,5 +31,3 @@ vignette("SaiLoR")
 Developer Carlos Alfonso-Gonzalez. For questions or feedback you can contact:
 
 alfonso@ie-freiburg.mpg.de
-
-
