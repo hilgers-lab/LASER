@@ -1,9 +1,13 @@
-annot_path <- "../../data/dm6.annot.gtf.gz"
+annot_path <- system.file('data/dm6.annot.gtf.gz', package = 'SaiLoR')
+junction_path <- system.file('data/short_read_junctions.SJ.out.tab', package = 'SaiLoR')
+
+
+#annot_path <- "../data/dm6.annot.gtf.gz"
 ref_annot <- rtracklayer::import.gff(annot_path)
 # test junction reference generation
-junction_path <- "../../data/short_read_junctions.SJ.out.tab"
+#junction_path <- "../data/short_read_junctions.SJ.out.tab"
 test_that('create_reference_junctions correctly extracts reference', {
-  expect_error(create_reference_junctions( junction_path, min.jcounts = 2 , ref_annot, type="short"))
+  expect_no_error(create_reference_junctions( junction_path, min.jcounts = 2 , ref_annot, type="short"))
 })
 
 test_that('create_reference_junctions returns expected output genomic ranges',{
