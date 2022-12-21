@@ -17,10 +17,6 @@ library(SaiLoR)
 browseVignettes("SaiLoR")
 ```
 
-## snakemake 
-
-We also provide a snakemake workflow that allows SaiLoR to be run on large samples.
-
 ## Contact
 
 Developer Carlos Alfonso-Gonzalez. For questions or feedback you can contact:

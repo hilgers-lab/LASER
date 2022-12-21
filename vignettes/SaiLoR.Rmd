@@ -14,11 +14,16 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, warning=FALSE, message=FALSE}
 library(SaiLoR)
 ```
 
 # Running SAILOR 
+
+# Required input files: 
+  * bam files [minimap2](https://github.com/lh3/minimap2) 
+  * reference annotation 
+  * short read sequencing SJ.out files from [STAR](https://github.com/alexdobin/STAR)
 
 # Building junction reference. 
 
@@ -41,7 +46,7 @@ referenece_junctions
 
 SaiLoR generates a database with read-to-feature assignments. This process involves three steps occurring within `read_to_junctions()`. The steps include: 1) Identifying only 5'-3' full length read isoforms. This filtering is done with `get_sailor_full_lengths()`, considering only reads spanning an annotated TSS and 3' end. 2) Correcting the junctions found in long reads using reference annotation and short read data in `read_refjunction_correction()`. 3) Last, `make_junction_database()` takes each read and assigns the features it contains: TSS, TES, and the junctions it contains.  
 
-```{r}
+```{r,warning=FALSE, message=FALSE}
 bamPath <- "../data/testBam.bam"
 exonlinks.counts<- read_to_junctions(bamPath, referenece_junctions, annot_path)
 ```
@@ -50,7 +55,7 @@ exonlinks.counts<- read_to_junctions(bamPath, referenece_junctions, annot_path)
 
 SaiLoR calculates exon couplings by generating contingency matrices from exon junctions to promoters with `compute_exon_tss_couplings()` and exon junctions to 3' ends with `compute_exon_3end_couplings()`. It uses multinomial testing with the chi-squared statistic to test the significance of the couplings. To account for possible biases due to low counts, the p-value is simulated using Monte Carlo methods.
 
-```{r}
+```{r,warning=FALSE, message=FALSE}
 couplings <- calculate_exon_couplings(exonlinks.counts,  referenece_junctions )
 ```
 
