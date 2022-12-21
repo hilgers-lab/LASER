@@ -88,8 +88,7 @@ compute_exon_tss_couplings <- function(junctions,junctionRef){
   genesMJC <-
     annotPairsExp %>% dplyr::distinct(new_junID, .keep_all = TRUE) %>% dplyr::group_by(gene_id) %>% tally() %>% filter(n >1) %>% dplyr::pull(gene_id)
   annotPairsExp <- annotPairsExp %>% filter(gene_id %in% genesMJC)
-  ### Testing
-  ##########################################################################################
+  ### Prepare data for multinomial testing
   perGeneList <- split(annotPairsExp, f = annotPairsExp$gene_id)
   couplingsmatrix <- lapply(perGeneList, function(x) {
     x1 <-
@@ -113,21 +112,21 @@ compute_exon_tss_couplings <- function(junctions,junctionRef){
   couplingsmatrix <- lapply(couplingsmatrix, function(x) {
     x + 1
   })
-  ## fixes remove single junction genes.
+  ## Function for multinomial testing
   perGeneChisqTest <- lapply(couplingsmatrix, function(x) {
     # MONTE CARLO SIMULATION P-VALUE
     x2 <- chisq.test(x, simulate.p.value = TRUE)
     x1 <- x2$p.value
     return(x1)
   })
-
+  ## Function for residual extraction
   perGeneSquareRes <- lapply(couplingsmatrix, function(x) {
     x2 <- chisq.test(x, simulate.p.value = TRUE)
     # RESIDUALS from chisq.test
     x1 <- x2$statistic
     return(x1)
   })
-
+  ## Prepare contigency table
   makeDFPerGene <- function(x){
     td <- chisq.test(x)
     tdo <- as.data.frame(td$observed) %>%
@@ -168,6 +167,7 @@ compute_exon_tss_couplings <- function(junctions,junctionRef){
     dplyr::rename(sqrtRes = 1) %>%
     dplyr::mutate(gene_id = rownames(.))
   affectedGenes<- left_join(affectedGenes, affectedGenesXsquare, by="gene_id")
+  # adjust p-values
   affectedGenes$adj.pvalue <- p.adjust(affectedGenes$p.value.chisq)
   resultTest  <- list()
   resultTest$couplingsPerGene  <- affectedGenes

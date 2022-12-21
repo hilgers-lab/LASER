@@ -9,7 +9,7 @@
 ![GitHub](https://img.shields.io/github/license/hilgers-lab/SaiLoR)
 <!-- badges: end -->
 
-SaiLoR determines the regulatory connections between exons, 5' ends, and 3' ends by analyzing every read as a complete transcript and using multinomial testing to evaluate the frequency of co-occurrence among these features.
+SaiLoR determines the regulatory connections between exons, 5' ends, and 3' ends by analyzing every read as a complete transcript and using multinomial testing to evaluate the frequency of co-occurrence among these features. 
 
 
 ### Installation
@@ -25,6 +25,13 @@ The vignette contains a step by step guide for data processing and identificatio
 library(SaiLoR)
 vignette("SaiLoR")
 ```
+
+# Release 
+
+Initial Release 0.1.0
+
+Release date: 20th Dec 2022
+This release corresponds to the SaiLoR version used by Alfonso-Gonzalez et al. manuscript
 
 ## Contact
 

@@ -40,6 +40,8 @@ referenece_junctions <- create_reference_junctions( junction_path, min.jcounts =
 referenece_junctions
 ```
 
+![SaiLoR regions of interest](inst/exdata/exonAnalysis.jpg) 
+
 # Read to junctions assignments 
 
 ## Full-length read filtering. 
