@@ -2,12 +2,12 @@
 ## Splicing influence estimation by Long Reads
 <!-- badges: start -->
 
-[![GitHub release (latest by
-date)](https://img.shields.io/github/v/release/hilgers-group/SaiLoR)](https://github.com/hilgers-lab/SaiLoR/releases)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/hilgers-lab/SaiLoR)
 [![Maintained?](https://img.shields.io/badge/Maintained%3F-Yes-brightgreen)](https://github.com/hilgers-lab/SaiLoR/graphs/contributors)
 [![Install](https://img.shields.io/badge/Install-Github-brightgreen)](#installation)
+[![Downloads](https://img.shields.io/github/downloads/hilgers-lab/SaiLoR/total)]()
+![GitHub](https://img.shields.io/github/license/hilgers-lab/SaiLoR) 
 <!-- badges: end -->
-
 
 SaiLoR determines the regulatory connections between exons, 5' ends, and 3' ends by analyzing every read as a complete transcript and using multinomial testing to evaluate the frequency of co-occurrence among these features. 
 
@@ -20,9 +20,10 @@ devtools::install_github("hilgers-lab/SaiLoR", build = TRUE, build_vignettes = T
 ```
 ### Usage 
 The vignette contains a step by step guide for data processing and identification of exon-couplings.
+
 ```
 library(SaiLoR)
-browseVignettes("SaiLoR")
+vignette("SaiLoR")
 ```
 
 ## Contact

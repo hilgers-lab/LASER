@@ -31,10 +31,10 @@ SaiLoR requires a reference junction set to identify couplings. It only analyzes
 
 ```{r, warning=FALSE, message=FALSE}
 # load reference annotation 
-annot_path <- "../data/dm6.annot.gtf.gz"
+annot_path <- system.file("inst/exdata", "dm6.annot.gtf.gz", package="SaiLoR")
 ref_annot <- rtracklayer::import.gff(annot_path)
 # load junctions from STAR 
-junction_path <- "../data/short_read_junctions.SJ.out.tab"
+junction_path <- system.file("inst/exdata","short_read_junctions.SJ.out.tab", package = 'SaiLoR')
 # create txf file of reference junctions 
 referenece_junctions <- create_reference_junctions( junction_path, min.jcounts = 2 , ref_annot, type="short")
 referenece_junctions
@@ -47,7 +47,7 @@ referenece_junctions
 SaiLoR generates a database with read-to-feature assignments. This process involves three steps occurring within `read_to_junctions()`. The steps include: 1) Identifying only 5'-3' full length read isoforms. This filtering is done with `get_sailor_full_lengths()`, considering only reads spanning an annotated TSS and 3' end. 2) Correcting the junctions found in long reads using reference annotation and short read data in `read_refjunction_correction()`. 3) Last, `make_junction_database()` takes each read and assigns the features it contains: TSS, TES, and the junctions it contains.  
 
 ```{r,warning=FALSE, message=FALSE}
-bamPath <- "../data/testBam.bam"
+bamPath <- system.file("inst/exdata","testBam.bam", package = 'SaiLoR')
 exonlinks.counts<- read_to_junctions(bamPath, referenece_junctions, annot_path)
 ```
 
