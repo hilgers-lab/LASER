@@ -1,6 +1,6 @@
 #annot_path <- system.file('data/dm6.annot.gtf.gz', package = 'SaiLoR')
-annot_path <- system.file("inst/exdata", "dm6.annot.gtf.gz", package="SaiLoR")
-junction_path <- system.file("inst/exdata","short_read_junctions.SJ.out.tab", package = 'SaiLoR')
+annot_path <- system.file("exdata/dm6.annot.gtf.gz", package="SaiLoR")
+junction_path <- system.file("exdata/short_read_junctions.SJ.out.tab", package = 'SaiLoR')
 
 
 #annot_path <- "../data/dm6.annot.gtf.gz"

@@ -115,20 +115,27 @@ compute_exon_tss_couplings <- function(junctions,junctionRef){
   ## Function for multinomial testing
   perGeneChisqTest <- lapply(couplingsmatrix, function(x) {
     # MONTE CARLO SIMULATION P-VALUE
+
     x2 <- chisq.test(x, simulate.p.value = TRUE)
     x1 <- x2$p.value
     return(x1)
   })
   ## Function for residual extraction
   perGeneSquareRes <- lapply(couplingsmatrix, function(x) {
+    old.warn <- options()$warn
+    options(warn = -1)
     x2 <- chisq.test(x, simulate.p.value = TRUE)
+    options(warn = old.warn)
     # RESIDUALS from chisq.test
     x1 <- x2$statistic
     return(x1)
   })
   ## Prepare contigency table
   makeDFPerGene <- function(x){
+    old.warn <- options()$warn
+    options(warn = -1)
     td <- chisq.test(x)
+    options(warn = old.warn)
     tdo <- as.data.frame(td$observed) %>%
       dplyr::mutate(new_junID=rownames(.))
     tdo <- reshape2::melt( tdo) %>%

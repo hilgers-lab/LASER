@@ -115,13 +115,19 @@ compute_exon_3end_couplings <- function(junctions,junctionRef){
   ## Multinomial testing
   perGeneChisqTest <- lapply(couplingsmatrix, function(x) {
     # MONTE CARLO SIMULATION P-VALUE
+    old.warn <- options()$warn
+    options(warn = -1)
     x2 <- chisq.test(x, simulate.p.value = TRUE)
+    options(warn = old.warn)
     x1 <- x2$p.value
     return(x1)
   })
 
   perGeneSquareRes <- lapply(couplingsmatrix, function(x) {
+    old.warn <- options()$warn
+    options(warn = -1)
     x2 <- chisq.test(x, simulate.p.value = TRUE)
+    options(warn = old.warn)
     # RESIDUALS from chisq.test
     x1 <- x2$statistic
     return(x1)
