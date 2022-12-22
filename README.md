@@ -24,7 +24,7 @@ devtools::install_github("hilgers-lab/SaiLoR", build = TRUE, build_vignettes = T
   * short read sequencing SJ.out files from [STAR](https://github.com/alexdobin/STAR)
   
 ### Usage
-The vignette contains a step by step guide for data processing and identification of exon-couplings.
+A step by step guide for data processing and identification of exon-couplings can be found [here.][https://hilgers-lab.github.io/SaiLoR/docs/SaiLoR.html]. 
 
 ```
 library(SaiLoR)
