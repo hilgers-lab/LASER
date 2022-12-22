@@ -40,7 +40,7 @@ referenece_junctions <- create_reference_junctions( junction_path, min.jcounts =
 referenece_junctions
 ```
 
-![Gene model!](figures/exonAnalysis.jpg)
+![Gene model!](figures/exonAnalysis.jpg){width=60%}
 
 # Read to junctions assignments 
 
