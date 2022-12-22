@@ -18,6 +18,11 @@ SaiLoR determines the regulatory connections between exons, 5' ends, and 3' ends
 install.packages("devtools")
 devtools::install_github("hilgers-lab/SaiLoR", build = TRUE, build_vignettes = TRUE)
 ```
+### Input files 
+  * bam files [minimap2](https://github.com/lh3/minimap2) 
+  * reference annotation 
+  * short read sequencing SJ.out files from [STAR](https://github.com/alexdobin/STAR)
+  
 ### Usage
 The vignette contains a step by step guide for data processing and identification of exon-couplings.
 
