@@ -21,7 +21,7 @@ devtools::install_github("hilgers-lab/SaiLoR", build = TRUE, build_vignettes = T
 ### Input files 
   * Genome Alignment bam files [minimap2](https://github.com/lh3/minimap2) using parameters `minimap2 -ax splice -u f annotation/genome.fa long_read.fastq.gz | samtools sort -@ 4 -o output.bam - samtools index output.bam`
   * Reference annotation in gff format. 
-  * Short read sequencing SJ.out files from [STAR](https://github.com/alexdobin/STAR). We recommend to pull SJ.out into a single SJ.out from many experiments and filter by min counts. 
+  * Short read sequencing SJ.out files [STAR](https://github.com/alexdobin/STAR). Example file in [here](https://github.com/hilgers-lab/SaiLoR/blob/master/inst/exdata/short_read_junctions.SJ.out.tab). We recommend to pull SJ.out into a single SJ.out from many experiments and filter by min counts. 
   
 ### Usage
 A step by step guide for data processing and identification of exon-couplings can be found 
