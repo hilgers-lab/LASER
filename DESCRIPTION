@@ -28,7 +28,9 @@ Imports:
     edgeR,
     rtracklayer,
     maditr,
-    reshape2
+    reshape2,
+    ggplot2,
+    stringr
 Suggests: 
     knitr,
     rmarkdown,

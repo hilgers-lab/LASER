@@ -57,7 +57,6 @@ compute_exon_tss_couplings <- function(junctions,junctionRef){
       tssJunID = paste0(promoter_id, ":", new_junID),
       isoID = paste0(promoter_id, ":", new_junID, ":", tes_id)
     )
-  cat("test")
   # lets make small database to annotate the counts
   simpleT <-
     testSub %>%
@@ -178,6 +177,7 @@ compute_exon_tss_couplings <- function(junctions,junctionRef){
   affectedGenes$adj.pvalue <- p.adjust(affectedGenes$p.value.chisq)
   resultTest  <- list()
   resultTest$couplingsPerGene  <- affectedGenes
-  resultTest$couplingsPerJunction  <- longTable
+  resultTest$couplingsPerJunction  <- longTable %>% dplyr::select(-c(gene_id, jun_id))
+  message("Couplings for TSS and exons ready")
   return(resultTest)
 }

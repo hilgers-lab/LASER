@@ -3,8 +3,10 @@ title: "Splicing influence estimation by Long Reads: SaiLoR"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{SaiLoR}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r, include = FALSE}
@@ -18,16 +20,21 @@ knitr::opts_chunk$set(
 library(SaiLoR)
 ```
 
+```{r, warning=FALSE, message=FALSE, include=FALSE}
+library(ggplot2)
+library(dplyr)
+```
+
 # Running SAILOR 
 
-# Required input files: 
-  * bam files [minimap2](https://github.com/lh3/minimap2) 
-  * reference annotation 
-  * short read sequencing SJ.out files from [STAR](https://github.com/alexdobin/STAR)
-
+### Input files 
+  * Genome Alignment bam files [minimap2](https://github.com/lh3/minimap2) using parameters `minimap2 -ax splice -u f annotation/genome.fa long_read.fastq.gz | samtools sort -@ 4 -o output.bam - samtools index output.bam`
+  * Reference annotation in gtf format. Example file [here](https://github.com/hilgers-lab/SaiLoR/blob/master/inst/exdata/dm6.annot.gtf.gz) 
+  * Short read sequencing SJ.out files [STAR](https://github.com/alexdobin/STAR). Example file in [here](https://github.com/hilgers-lab/SaiLoR/blob/master/inst/exdata/short_read_junctions.SJ.out.tab). We recommend to pull SJ.out into a single SJ.out from many experiments and filter by min counts.
+  
 # Building junction reference. 
 
-SaiLoR requires a reference junction set to identify couplings. It only analyzes junctions that occur outside the influence of 5' selection (alternative transcription start sites) or 3' selection (alternative polyadenylation). Sailor can build the reference using both a reference annotation and short read sequence data junctions from STAR.
+SaiLoR requires a reference junction set to identify couplings. It only analyzes junctions that occur outside the influence of 5' selection (alternative transcription start sites) or 3' selection (alternative polyadenylation). Sailor can build the reference using both a reference annotation and short read sequence data junctions from STAR. The parameter `min.jcounts` is relevant to remove rare lowly expressed splice junctions. 
 
 ```{r, warning=FALSE, message=FALSE}
 # load reference annotation 
@@ -46,11 +53,19 @@ referenece_junctions
 
 ## Full-length read filtering. 
 
-SaiLoR generates a database with read-to-feature assignments. This process involves three steps occurring within `read_to_junctions()`. The steps include: 1) Identifying only 5'-3' full length read isoforms. This filtering is done with `get_sailor_full_lengths()`, considering only reads spanning an annotated TSS and 3' end. 2) Correcting the junctions found in long reads using reference annotation and short read data in `read_refjunction_correction()`. 3) Last, `make_junction_database()` takes each read and assigns the features it contains: TSS, TES, and the junctions it contains.  
+SaiLoR generates a database with read-to-feature assignments. To optimize the documentation time, for this vignette we took a subset of the file bam file deposited in: [GSE203583] (https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi), selecting regions for 4 genes. The bam file is subjected to the function `read_to_junctions()` for full-length filtering.  
+This process involves three steps occurring within `read_to_junctions()`. The steps include: 1) Identifying only 5'-3' full length read isoforms. This filtering is done with `get_sailor_full_lengths()`, considering only reads spanning an annotated TSS and 3' end. 2) Correcting the junctions found in long reads using reference annotation and short read data in `read_refjunction_correction()`. 3) Last, `make_junction_database()` takes each read and assigns the features it contains: TSS, TES, and the junctions it contains.  
 
 ```{r,warning=FALSE, message=FALSE}
 bamPath <- system.file("exdata/testBam.bam", package = 'SaiLoR')
 exonlinks.counts<- read_to_junctions(bamPath, referenece_junctions, annot_path)
+```
+
+This function outputs a table containing a database per read, with the assigned features: 
+
+```{r, include=FALSE}
+dat <- exonlinks.counts %>% dplyr::select(read_id , new_junID, tes_id,  promoter_id, pairs_id) 
+knitr::kable(head(dat))
 ```
 
 # Calculate exon-junction couplings to 5'/3'
@@ -61,11 +76,45 @@ SaiLoR calculates exon couplings by generating contingency matrices from exon ju
 couplings <- calculate_exon_couplings(exonlinks.counts,  referenece_junctions )
 ```
 
+The output of the function returns couplings of 3'end `couplings$TES.` to exon as well as TSS `couplings$TSS.` to exon. Each object contains 2 outputs: adjusted p-values per gene in `couplingsPerGene` and the residuals per junction-TSS/3'end pair in `couplingsPerJunction`. 
+
+`couplingsPerGene`
+```{r}
+couplings$TSS.couplingsPerGene 
+```
+`couplingsPerJunction`
+```{r}
+head( couplings$TSS.couplingsPerJunction, 10) 
+```
 
 # Exploring results 
 
+## Transcription start site couplings with exon usage
+
+Looking closely at Stai gene [FBgn0266521] (https://flybase.org/reports/FBgn0266521). We can observed the couplings of the different junctions and their residuals values. Residual values represent the difference between observed and expected junction of a giving pair in the gene. 
+
+Looking into individual promoters we can notice how the first TSS of Stai `FBgn0266521:P01` it's strongly associated with junctions `6122411-6122697` and `6122854-6122977`, while junctions `6121944-6122004` and `6122191-6122263` are depleted from the same promoter but highly enriched in the 2nd TSS `FBgn0266521:P02`. 
+
+```{r}
+couplings$TSS.couplingsPerJunction %>% 
+  filter(grepl("FBgn0266521", pairs_id)) %>% mutate(promoter_id=stringr::str_split_fixed(.data$pairs_id,":" ,n = 3)[,3], junction=stringr::str_split_fixed(.data$pairs_id,":" ,n = 3)[,2]) %>% ggplot(., aes(x=junction, y=residuals, color=promoter_id)) + geom_point(size=3) + theme_classic() + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + facet_grid(cols=vars(promoter_id)) + scale_color_manual(values=c("#FF355E","#004F98", "#679267"))+ geom_hline(yintercept=0)
+```
 
 
+## 3'end couplings with exon usage
+
+In contrast tacc gene [FBgn0026620] (https://flybase.org/reports/FBgn0026620). We can observed the couplings related to the usage of specific exon-junction to the 3'end selection of the gene. 
+
+```{r}
+couplings$TES.couplingsPerJunction %>% 
+  filter(grepl("FBgn0026620", pairs_id)) %>% mutate(tes_id=stringr::str_split_fixed(.data$pairs_id,":" ,n = 3)[,3], junction=stringr::str_split_fixed(.data$pairs_id,":" ,n = 3)[,2]) %>% ggplot(., aes(x=junction, y=residuals, color=tes_id)) + geom_point(size=3) + theme_classic() + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + facet_grid(cols=vars(tes_id)) + scale_color_manual(values=c("#FF355E","#004F98", "#679267", "blue", "lavender")) + geom_hline(yintercept=0)
+```
+
+## Session information
+
+```{r SessionInfo, eval=TRUE, echo=FALSE}
+sessionInfo()
+```
 
 
 

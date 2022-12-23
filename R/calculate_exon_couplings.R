@@ -13,5 +13,6 @@ calculate_exon_couplings <- function(junctions,reference_junctions){
   res_couplings_tes <- compute_exon_3end_couplings(junctions,reference_junctions)
   couplingsResult$TSS <- res_couplings_tss
   couplingsResult$TES <- res_couplings_tes
+  couplingsResult <- unlist(couplingsResult, recursive = FALSE)
   return(couplingsResult)
 }
