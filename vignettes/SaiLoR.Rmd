@@ -95,7 +95,7 @@ Looking closely at Stai gene [FBgn0266521] (https://flybase.org/reports/FBgn0266
 
 Looking into individual promoters we can notice how the first TSS of Stai `FBgn0266521:P01` it's strongly associated with junctions `6122411-6122697` and `6122854-6122977`, while junctions `6121944-6122004` and `6122191-6122263` are depleted from the same promoter but highly enriched in the 2nd TSS `FBgn0266521:P02`. 
 
-```{r}
+```{r, fig.align='center', fig.height=5, fig.width=6.5}
 couplings$TSS.couplingsPerJunction %>% 
   filter(grepl("FBgn0266521", pairs_id)) %>% mutate(promoter_id=stringr::str_split_fixed(.data$pairs_id,":" ,n = 3)[,3], junction=stringr::str_split_fixed(.data$pairs_id,":" ,n = 3)[,2]) %>% ggplot(., aes(x=junction, y=residuals, color=promoter_id)) + geom_point(size=3) + theme_classic() + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + facet_grid(cols=vars(promoter_id)) + scale_color_manual(values=c("#FF355E","#004F98", "#679267"))+ geom_hline(yintercept=0)
 ```
@@ -105,7 +105,7 @@ couplings$TSS.couplingsPerJunction %>%
 
 In contrast tacc gene [FBgn0026620] (https://flybase.org/reports/FBgn0026620). We can observed the couplings related to the usage of specific exon-junction to the 3'end selection of the gene. 
 
-```{r}
+```{r, fig.align='center', fig.height=5, fig.width=6.5}
 couplings$TES.couplingsPerJunction %>% 
   filter(grepl("FBgn0026620", pairs_id)) %>% mutate(tes_id=stringr::str_split_fixed(.data$pairs_id,":" ,n = 3)[,3], junction=stringr::str_split_fixed(.data$pairs_id,":" ,n = 3)[,2]) %>% ggplot(., aes(x=junction, y=residuals, color=tes_id)) + geom_point(size=3) + theme_classic() + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + facet_grid(cols=vars(tes_id)) + scale_color_manual(values=c("#FF355E","#004F98", "#679267", "blue", "lavender")) + geom_hline(yintercept=0)
 ```
