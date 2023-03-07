@@ -1,4 +1,4 @@
-# SaiLoR
+# LASER
 ## Splicing influence estimation by Long Reads
 <!-- badges: start -->
 
