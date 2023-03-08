@@ -1,4 +1,4 @@
 library(testthat)
-library(SaiLoR)
+library(LASER)
 
-test_check("SaiLoR")
+test_check("LASER")

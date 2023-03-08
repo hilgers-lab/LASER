@@ -1,5 +1,5 @@
-Package: SaiLoR
-Title: Splicing influence estimation by Long Reads (SaiLoR)
+Package: LASER
+Title: Long-reads-based Alternative Splicing Estimation and Recognition
 Version: 0.0.0.9000
 Authors@R: 
     person("Carlos", "Alfonso-Gonzalez", , "alfonsot@ie-freibirg.mpg.de", role = c("aut", "cre"),

@@ -1,8 +1,8 @@
 ---
-title: "Splicing influence estimation by Long Reads: SaiLoR"
+title: "Long-reads-based Alternative Splicing Estimation and Recognition: LASER"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{SaiLoR}
+  %\VignetteIndexEntry{LASER}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup, warning=FALSE, message=FALSE}
-library(SaiLoR)
+library(LASER)
 ```
 
 ```{r, warning=FALSE, message=FALSE, include=FALSE}
@@ -25,23 +25,23 @@ library(ggplot2)
 library(dplyr)
 ```
 
-# Running SAILOR 
+# Running LASER 
 
 ### Input files 
   * Genome Alignment bam files [minimap2](https://github.com/lh3/minimap2) using parameters `minimap2 -ax splice -u f annotation/genome.fa long_read.fastq.gz | samtools sort -@ 4 -o output.bam - samtools index output.bam`
-  * Reference annotation in gtf format. Example file [here](https://github.com/hilgers-lab/SaiLoR/blob/master/inst/exdata/dm6.annot.gtf.gz) 
-  * Short read sequencing SJ.out files [STAR](https://github.com/alexdobin/STAR). Example file in [here](https://github.com/hilgers-lab/SaiLoR/blob/master/inst/exdata/short_read_junctions.SJ.out.tab). We recommend to pull SJ.out into a single SJ.out from many experiments and filter by min counts.
+  * Reference annotation in gtf format. Example file [here](https://github.com/hilgers-lab/LASER/blob/master/inst/exdata/dm6.annot.gtf.gz) 
+  * Short read sequencing SJ.out files [STAR](https://github.com/alexdobin/STAR). Example file in [here](https://github.com/hilgers-lab/LASER/blob/master/inst/exdata/short_read_junctions.SJ.out.tab). We recommend to pull SJ.out into a single SJ.out from many experiments and filter by min counts.
   
 # Building junction reference. 
 
-SaiLoR requires a reference junction set to identify couplings. It only analyzes junctions that occur outside the influence of 5' selection (alternative transcription start sites) or 3' selection (alternative polyadenylation). Sailor can build the reference using both a reference annotation and short read sequence data junctions from STAR. The parameter `min.jcounts` is relevant to remove rare lowly expressed splice junctions. 
+LASER requires a reference junction set to identify couplings. It only analyzes junctions that occur outside the influence of 5' selection (alternative transcription start sites) or 3' selection (alternative polyadenylation). LASER can build the reference using both a reference annotation and short read sequence data junctions from STAR. The parameter `min.jcounts` is relevant to remove rare lowly expressed splice junctions. 
 
 ```{r, warning=FALSE, message=FALSE}
 # load reference annotation 
-annot_path <- system.file("exdata/dm6.annot.gtf.gz", package="SaiLoR")
+annot_path <- system.file("exdata/dm6.annot.gtf.gz", package="LASER")
 ref_annot <- rtracklayer::import.gff(annot_path)
 # load junctions from STAR 
-junction_path <- system.file("exdata/short_read_junctions.SJ.out.tab", package = 'SaiLoR')
+junction_path <- system.file("exdata/short_read_junctions.SJ.out.tab", package = 'LASER')
 # create txf file of reference junctions 
 referenece_junctions <- create_reference_junctions( junction_path, min.jcounts = 2 , ref_annot, type="short")
 referenece_junctions
@@ -53,11 +53,11 @@ referenece_junctions
 
 ## Full-length read filtering. 
 
-SaiLoR generates a database with read-to-feature assignments. To optimize the documentation time, for this vignette we took a subset of the file bam file deposited in: [GSE203583] (https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi), selecting regions for 4 genes. The bam file is subjected to the function `read_to_junctions()` for full-length filtering.  
-This process involves three steps occurring within `read_to_junctions()`. The steps include: 1) Identifying only 5'-3' full length read isoforms. This filtering is done with `get_sailor_full_lengths()`, considering only reads spanning an annotated TSS and 3' end. 2) Correcting the junctions found in long reads using reference annotation and short read data in `read_refjunction_correction()`. 3) Last, `make_junction_database()` takes each read and assigns the features it contains: TSS, TES, and the junctions it contains.  
+LASER generates a database with read-to-feature assignments. To optimize the documentation time, for this vignette we took a subset of the file bam file deposited in: [GSE203583] (https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi), selecting regions for 4 genes. The bam file is subjected to the function `read_to_junctions()` for full-length filtering.  
+This process involves three steps occurring within `read_to_junctions()`. The steps include: 1) Identifying only 5'-3' full length read isoforms. This filtering is done with `get_LASER_full_lengths()`, considering only reads spanning an annotated TSS and 3' end. 2) Correcting the junctions found in long reads using reference annotation and short read data in `read_refjunction_correction()`. 3) Last, `make_junction_database()` takes each read and assigns the features it contains: TSS, TES, and the junctions it contains.  
 
 ```{r,warning=FALSE, message=FALSE}
-bamPath <- system.file("exdata/testBam.bam", package = 'SaiLoR')
+bamPath <- system.file("exdata/testBam.bam", package = 'LASER')
 exonlinks.counts<- read_to_junctions(bamPath, referenece_junctions, annot_path)
 ```
 
@@ -70,7 +70,7 @@ knitr::kable(head(dat))
 
 # Calculate exon-junction couplings to 5'/3'
 
-SaiLoR calculates exon couplings by generating contingency matrices from exon junctions to promoters with `compute_exon_tss_couplings()` and exon junctions to 3' ends with `compute_exon_3end_couplings()`. It uses multinomial testing with the chi-squared statistic to test the significance of the couplings. To account for possible biases due to low counts, the p-value is simulated using Monte Carlo methods.
+LASER calculates exon couplings by generating contingency matrices from exon junctions to promoters with `compute_exon_tss_couplings()` and exon junctions to 3' ends with `compute_exon_3end_couplings()`. It uses multinomial testing with the chi-squared statistic to test the significance of the couplings. To account for possible biases due to low counts, the p-value is simulated using Monte Carlo methods.
 
 ```{r,warning=FALSE, message=FALSE}
 couplings <- calculate_exon_couplings(exonlinks.counts,  referenece_junctions )
