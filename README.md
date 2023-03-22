@@ -7,6 +7,8 @@
 [![Install](https://img.shields.io/badge/Install-Github-brightgreen)](#installation)
 [![Downloads](https://img.shields.io/github/downloads/hilgers-lab/LASER/total)]()
 ![GitHub](https://img.shields.io/github/license/hilgers-lab/LASER)
+[![DOI](https://zenodo.org/badge/580128861.svg)](https://zenodo.org/badge/latestdoi/580128861)
+
 <!-- badges: end -->
 
 LASER determines the regulatory connections between exons, 5' ends, and 3' ends by analyzing every read as a complete transcript and using multinomial testing to evaluate the frequency of co-occurrence among these features. 
