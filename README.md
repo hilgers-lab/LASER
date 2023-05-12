@@ -39,8 +39,8 @@ vignette("LASER")
 
 Initial Release 0.1.0
 
-Release date: 20th Dec 2022
-This release corresponds to the LASER version used by Alfonso-Gonzalez et al. manuscript
+Release date: 12th May 2023
+This release corresponds to the LASER version used by [Alfonso-Gonzalez et al. 2023](doi.org/10.1016/j.cell.2023.04.012)
 
 ## Contact
 
