@@ -1,3 +1,4 @@
+![Stay proActiv!](man/figures/logo.png)
 # LASER
 ## Long-reads-based Alternative Splicing Estimation and Recognition
 <!-- badges: start -->
