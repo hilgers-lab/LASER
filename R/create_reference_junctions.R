@@ -10,7 +10,7 @@
 #'
 #' @examples
 read_sjout <- function(sjbPath) {
-  junctionFile <- readr::read_table(sjbPath, col_names = FALSE)
+  junctionFile <- read.table(sjbPath)
   colnames(junctionFile) <-
     c(
       "seqnames",
@@ -190,7 +190,7 @@ create_reference_junctions <- function(pathSJ.out, min.jcounts, refAnnot, type){
     reference_junctions <- c(shortReadJunctions, annotationJunctions)
     return(reference_junctions)
   }else{
-    annotation_junctions <- get_junctions_from_annot(AnnotJunctions, refAnnot)
+    annotation_junctions <- get_junctions_from_annot(AnnotJunctions, linksDatabase, genesMultipleJunctions)
     return(annotation_junctions)
   }
 }
