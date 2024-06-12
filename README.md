@@ -19,7 +19,7 @@ LASER determines the regulatory connections between exons, 5' ends, and 3' ends 
 
 ```
 install.packages("devtools")
-devtools::install_github("hilgers-lab/LASER", build = TRUE, build_vignettes = TRUE)
+devtools::install_github("hilgers-lab/LASER", build = TRUE, build_vignettes = FALSE)
 ```
 ### Input files 
   * Genome Alignment bam files [minimap2](https://github.com/lh3/minimap2) using parameters `minimap2 -ax splice -u f annotation/genome.fa long_read.fastq.gz | samtools sort -@ 4 -o output.bam - samtools index output.bam`
